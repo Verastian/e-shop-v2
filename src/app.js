@@ -2,9 +2,12 @@ import express from "express";
 import routes from "./routes/index.router";
 import morgan from "morgan";
 import "dotenv/config";
+import initialSetup from "./helpers/initialSetup";
 
 const app = express();
+initialSetup.createRoles();
 const api = process.env.API_URL;
+
 // middlewares
 app.use(morgan("tiny"));
 app.use(express.json());

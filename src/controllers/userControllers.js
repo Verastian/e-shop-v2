@@ -39,9 +39,13 @@ export default {
     try {
       // Roles
       const { roles } = req.body;
+      // if no role, create default user role
+      if (!roles.lenth) {
+        console.log(roles);
+      }
       const rolesFound = await Role.find({ name: { $in: roles } });
       const passHash = await pass.encryptPass(req.body.passwordHash);
-      console.log(rolesFound);
+      // console.log(rolesFound);
 
       let user = new User({
         name: req.body.name,
@@ -101,7 +105,9 @@ export default {
       } else {
         newPass = userExist.passwordHash;
       }
-
+      // roles
+      const { roles } = req.body;
+      const rolesFound = await Role.find({ name: { $in: roles } });
       let user = await User.findByIdAndUpdate(
         req.params.id,
         {
@@ -109,7 +115,8 @@ export default {
           email: req.body.email,
           passwordHash: newPass,
           phone: req.body.phone,
-          isAdmin: req.body.isAdmin,
+          // isAdmin: req.body.isAdmin,
+          roles: rolesFound.map((role) => role._id),
           street: req.body.street,
           apartment: req.body.apartment,
           zip: req.body.zip,
