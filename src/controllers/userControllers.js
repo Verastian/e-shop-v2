@@ -37,13 +37,16 @@ export default {
 
   create: async (req, res, next) => {
     try {
-      // Roles
+      // Roles : get roles from request
       const { roles } = req.body;
+      let rolesFound;
+      rolesFound = await Role.find({ name: { $in: roles } });
       // if no role, create default user role
-      if (!roles.lenth) {
-        console.log(roles);
+      if (!roles.length) {
+        const role = await Role.findOne({ name: "user" });
+        rolesFound = [role._id];
+        // console.log(roles);
       }
-      const rolesFound = await Role.find({ name: { $in: roles } });
       const passHash = await pass.encryptPass(req.body.passwordHash);
       // console.log(rolesFound);
 
