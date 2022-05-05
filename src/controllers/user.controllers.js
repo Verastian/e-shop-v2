@@ -1,5 +1,5 @@
 import User from "../models/user";
-import pass from "../helpers/pass";
+import pass from "../helpers/password.service";
 import Role from "../models/role";
 
 export default {
@@ -40,13 +40,8 @@ export default {
       // Roles : get roles from request
       const { roles } = req.body;
       let rolesFound;
+
       rolesFound = await Role.find({ name: { $in: roles } });
-      // if no role, create default user role
-      if (!roles.length) {
-        const role = await Role.findOne({ name: "user" });
-        rolesFound = [role._id];
-        // console.log(roles);
-      }
       const passHash = await pass.encryptPass(req.body.passwordHash);
       // console.log(rolesFound);
 

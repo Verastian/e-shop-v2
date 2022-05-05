@@ -16,4 +16,24 @@ export default {
       console.error(error);
     }
   },
+
+  passRules: (pass) => {
+    const // minMaxLength = /^[\s\S]{8,32}$/,
+      upper = /[A-Z]/,
+      lower = /[a-z]/,
+      number = /[0-9]/,
+      special = /[ !"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/;
+
+    if (
+      // minMaxLength.test(pass) &&
+      upper.test(pass) &&
+      lower.test(pass) &&
+      number.test(pass) &&
+      special.test(pass)
+    ) {
+      return true;
+    }
+
+    return false;
+  },
 };

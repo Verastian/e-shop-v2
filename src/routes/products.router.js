@@ -1,6 +1,6 @@
 // import routerx from "express-promise-router";
 import { Router } from "express";
-import productControllers from "../controllers/productController";
+import productControllers from "../controllers/product.controller";
 import uploadImages from "../middlewares/uploadImages";
 
 // const router = routerx();

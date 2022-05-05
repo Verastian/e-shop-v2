@@ -1,5 +1,5 @@
 import Order from "../models/order";
-import OrderItem from "./order-item";
+import OrderItem from "./order-item.controller";
 
 export default {
   /* *** */

@@ -15,7 +15,7 @@ const userSchema = db.Schema({
   },
   phone: {
     type: String,
-    required: true,
+    // required: true,
   },
   /*  isAdmin: {
     type: Boolean,

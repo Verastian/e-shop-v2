@@ -13,6 +13,6 @@ router.use(`/products`, productRouter);
 router.use(`/categories`, categoryRouter);
 router.use(`/orders`, orderRouter);
 router.use(`/users`, userRouter);
-router.use(`/`, authRouter);
+router.use(`/auth`, authRouter);
 
 export default router;
