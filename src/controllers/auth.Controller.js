@@ -25,19 +25,21 @@ export default {
           .status(401)
           .json({ success: false, message: "You must enter a password" });
       }
-      const matchPass = pass.comparePass(
+      console.log(req.body.passwordHash);
+      console.log(userFound.passwordHash);
+
+      const matchPass = await pass.comparePass(
         req.body.passwordHash,
         userFound.passwordHash
       );
-
+      console.log(matchPass);
       if (!matchPass) {
         return res
           .status(401) //Unauthorized
           .json({ success: false, message: "Invalid Password!" });
-      } else {
-        const token = jwtoken.getToken({ id: userFound.id }, 86400);
-        res.status(200).json({ token });
       }
+      const token = jwtoken.getToken({ id: userFound.id }, 86400);
+      res.status(200).json({ token });
     } catch (error) {
       console.error(error);
       next();
@@ -108,10 +110,32 @@ export default {
   },
   // create new password
   createNewPassword: async (req, res, next) => {
+    const { id } = req.userId;
     // verify token
-    // console.log(req.userId);
-    const user = await User.findById({ _id: req.userId.id });
-    res.send(user);
+    const user = await User.findById({ _id: id });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User not found!" });
+    }
+    // haashear password
+    const passHash = await pass.encryptPass(req.body.passwordHash);
+
+    // create new password
+    const userWithNewPassword = await User.findByIdAndUpdate(
+      id,
+      {
+        passwordHash: passHash,
+      },
+      { new: true }
+    );
+
+    if (!userWithNewPassword) {
+      return res
+        .status(500)
+        .json({ success: false, message: "the password cannot be create" });
+    }
+    res.send(userWithNewPassword);
     next();
   },
 };
